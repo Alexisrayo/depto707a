@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>707A Guest Experience - Torre A</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+        
+        :root {
+            --brand-primary: #1e293b;
+            --brand-accent: #b5965a;
+            --brand-bg: #fafaf9;
+            --brand-card: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--brand-bg);
+            color: var(--brand-primary);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .serif { font-family: 'Playfair Display', serif; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-item.active {
+            color: var(--brand-accent);
+            position: relative;
+        }
+        
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background-color: var(--brand-accent);
+        }
+
+        .copy-toast {
+            visibility: hidden;
+            background: var(--brand-primary);
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            padding: 12px 24px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .copy-toast.show { visibility: visible; animation: fadeInOut 2.5s forwards; }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; bottom: 20px; }
+            20% { opacity: 1; bottom: 40px; }
+            80% { opacity: 1; bottom: 40px; }
+            100% { opacity: 0; bottom: 20px; }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .card-premium {
+            background: var(--brand-card);
+            border-radius: 24px;
+            border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: start;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+    </style>
+</head>
+<body class="pb-10">
+
+    <!-- Header Boutique -->
+    <header class="relative h-72 flex flex-col justify-end p-8 text-white overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent z-10"></div>
+        <div class="absolute inset-0 scale-105">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1200" alt="Apartamento Moderno" class="w-full h-full object-cover">
+        </div>
+        <div class="relative z-20">
+            <h1 class="serif text-4xl italic mb-1">Bienvenido al 707A</h1>
+            <p class="text-[10px] uppercase tracking-[0.4em] text-white/70 font-bold">Torre A • Santiago Boutique</p>
+        </div>
+    </header>
+
+    <!-- Navegación -->
+    <nav class="sticky top-0 bg-white/80 backdrop-blur-lg z-40 border-b overflow-x-auto no-scrollbar flex p-2 gap-1">
+        <button onclick="showTab('inicio')" id="btn-inicio" class="nav-item active px-5 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">🧭 Inicio</button>
+        <button onclick="showTab('uso')" id="btn-uso" class="nav-item px-5 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">🏠 Operación</button>
+        <button onclick="showTab('reglas')" id="btn-reglas" class="nav-item px-5 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">⚠️ Reglas</button>
+        <button onclick="showTab('barrio')" id="btn-barrio" class="nav-item px-5 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">📍 Entorno</button>
+        <button onclick="showTab('turismo')" id="btn-turismo" class="nav-item px-5 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">✈️ Turismo</button>
+        <button onclick="showTab('checkout')" id="btn-checkout" class="nav-item px-5 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">🚪 Salida</button>
+        <button onclick="showTab('soporte')" id="btn-soporte" class="nav-item px-5 py-4 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap text-red-600">🛠️ Soporte</button>
+    </nav>
+
+    <main class="max-w-md mx-auto px-6 py-8">
+
+        <!-- 1) INICIO RÁPIDO (RESTAURADO CON COMPLEMENTOS) -->
+        <section id="inicio" class="tab-content active space-y-6">
+            <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex justify-between items-center mb-8">
+                        <div class="bg-white/10 p-3 rounded-2xl backdrop-blur-md">
+                            <i class="fas fa-wifi text-xl text-brand-accent"></i>
+                        </div>
+                        <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-slate-400">WiFi Rápido</span>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-[9px] uppercase font-bold text-slate-500 tracking-widest mb-1">Red</p>
+                            <p class="font-bold text-xl" id="wifi-name">Red Amina</p>
+                        </div>
+                        <div class="flex justify-between items-center bg-white/5 p-5 rounded-3xl border border-white/10 backdrop-blur-sm">
+                            <div>
+                                <p class="text-[9px] uppercase font-bold text-slate-500 tracking-widest mb-1">Contraseña</p>
+                                <p class="font-mono text-lg font-bold" id="wifi-pass">SantaElena1864</p>
+                            </div>
+                            <button onclick="copyToClipboard('wifi-pass')" class="bg-white text-slate-900 h-12 w-12 rounded-2xl flex items-center justify-center active:scale-90 transition-all">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 italic text-center">Datos ubicados en el módem del salón</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recuadro Tus Anfitriones -->
+            <div class="card-premium p-6 flex items-center space-x-4 border-l-4 border-l-emerald-600">
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div>
+                    <p class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Tus anfitriones</p>
+                    <p class="font-bold text-slate-800 text-sm">Alexis & Sabina</p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Disponibles todos los días · 8:00 – 23:00 hrs</p>
+                </div>
+            </div>
+
+            <div class="card-premium p-7 border-l-4 border-l-[#b5965a]">
+                <h3 class="serif text-xl mb-4 flex items-center">
+                    <i class="fas fa-lock mr-3 text-brand-accent"></i> Ingreso al Departamento
+                </h3>
+                <div class="space-y-4 text-xs text-slate-600 leading-relaxed">
+                    <p>• Luego de la validación en conserjería, dirígete a la <strong>Torre A</strong>.</p>
+                    <p>• El departamento se encuentra en el <strong>piso 7, número 707A</strong>.</p>
+                    <div class="bg-slate-50 p-5 rounded-3xl text-center border border-slate-100">
+                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Código de acceso</p>
+                        <p class="text-xl font-bold text-slate-800 tracking-[0.2em]">6 DÍGITOS ID</p>
+                        <p class="text-[10px] text-slate-400 mt-1 italic">(Primeros 6 números del Rut, DNI o pasaporte)</p>
+                    </div>
+                    <p class="font-bold text-slate-800">Para ingresar:</p>
+                    <p>Digita el código en la cerradura negra y gira la manilla hacia abajo.</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Acceso al Edificio</p>
+                
+                <div class="card-premium overflow-hidden">
+                    <button class="w-full text-left p-5 flex justify-between items-center text-sm font-semibold" onclick="toggleAcc('acc-metro')">
+                        <span class="flex items-center"><i class="fas fa-subway mr-3 text-purple-600"></i> Transporte público</span>
+                        <i class="fas fa-chevron-down text-slate-300" id="icon-acc-metro"></i>
+                    </button>
+                    <div id="acc-metro" class="hidden p-5 bg-slate-50 border-t text-[11px] text-slate-600 leading-relaxed space-y-2">
+                        <p>• La mejor opción es <strong>Metro Ñuble</strong>, estación de combinación entre Línea 5 (verde) y Línea 6 (púrpura).</p>
+                        <p>• Camina en dirección poniente hacia Av. Vicuña Mackenna, cruza en la esquina y continúa hasta <strong>Vicuña Mackenna 1865</strong>.</p>
+                        <p>• Al llegar, utiliza el citófono para avisar a conserjería que te diriges al <strong>departamento 707A</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="card-premium overflow-hidden">
+                    <button class="w-full text-left p-5 flex justify-between items-center text-sm font-semibold" onclick="toggleAcc('acc-uber')">
+                        <span class="flex items-center"><i class="fas fa-taxi mr-3 text-blue-600"></i> Uber / Taxi / Transfer</span>
+                        <i class="fas fa-chevron-down text-slate-300" id="icon-acc-uber"></i>
+                    </button>
+                    <div id="acc-uber" class="hidden p-5 bg-slate-50 border-t text-[11px] text-slate-600 space-y-2">
+                        <p>• La entrada es por <strong>Santa Elena 1864, Santiago</strong>.</p>
+                        <p>• Al arribar, utiliza el citófono de acceso para informar a conserjería que vas al <strong>departamento 707A</strong>.</p>
+                        <p>• El vehículo debe utilizar los estacionamientos de visitas ubicados en el acceso.</p>
+                    </div>
+                </div>
+
+                <div class="card-premium overflow-hidden">
+                    <button class="w-full text-left p-5 flex justify-between items-center text-sm font-semibold" onclick="toggleAcc('acc-auto')">
+                        <span class="flex items-center"><i class="fas fa-car mr-3 text-green-600"></i> Auto particular</span>
+                        <i class="fas fa-chevron-down text-slate-300" id="icon-acc-auto"></i>
+                    </button>
+                    <div id="acc-auto" class="hidden p-5 bg-slate-50 border-t text-[11px] text-slate-600 space-y-3">
+                        <p>• Entrada vehicular por <strong>Santa Elena 1864</strong>. Requiere coordinación previa y registro de patente/modelo.</p>
+                        <div class="bg-slate-200 p-2 rounded-lg font-bold text-center">Nivel -1, Estacionamiento #32</div>
+                        <p>• Al llegar al departamento, encontrarás el <strong>control remoto del portón</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100 text-[10px] text-amber-800 leading-relaxed italic">
+                <i class="fas fa-info-circle mr-1"></i> En el primer ingreso es obligatorio registrarse en conserjería. El primer acceso siempre se realiza mediante citófono.
+            </div>
+        </section>
+
+        <!-- 2) OPERACIÓN (ACTUALIZADA CON ESPECIFICACIONES) -->
+        <section id="uso" class="tab-content space-y-5">
+            <h2 class="serif text-2xl mb-6">Operación del Hogar</h2>
+            
+            <!-- Cocina -->
+            <div class="card-premium overflow-hidden">
+                <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleAcc('uso-cook')">
+                    <span class="font-bold text-xs uppercase tracking-widest"><i class="fas fa-utensils mr-3 text-orange-400"></i> Cocina Eléctrica</span>
+                    <i class="fas fa-chevron-down text-slate-300" id="icon-uso-cook"></i>
+                </button>
+                <div id="uso-cook" class="hidden p-6 bg-slate-50 border-t text-xs text-slate-600 space-y-4">
+                    <p>Totalmente equipada con encimera eléctrica y microondas. Asegúrate de que la campana extractora esté encendida.</p>
+                    <div class="space-y-2 font-semibold">
+                        <p>1. Coloque la olla (de inducción) en el círculo.</p>
+                        <p>2. Presione <i class="fas fa-power-off"></i> por 2 segundos.</p>
+                        <p>3. Ajuste la potencia con <i class="fas fa-plus"></i> o <i class="fas fa-minus"></i>.</p>
+                    </div>
+                    <p class="text-red-500 font-bold italic">Advertencia: No use esponjas metálicas para limpiar el cristal.</p>
+                </div>
+            </div>
+
+            <!-- Aire Acondicionado -->
+            <div class="card-premium overflow-hidden">
+                <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleAcc('uso-ac')">
+                    <span class="font-bold text-xs uppercase tracking-widest"><i class="fas fa-snowflake mr-3 text-blue-400"></i> Aire Acondicionado</span>
+                    <i class="fas fa-chevron-down text-slate-300" id="icon-uso-ac"></i>
+                </button>
+                <div id="uso-ac" class="hidden p-6 bg-slate-50 border-t text-xs text-slate-600 space-y-4">
+                    <p>Climatización inteligente. Ajuste desde el <strong>panel táctil en el mesón</strong>.</p>
+                    <div class="bg-white p-4 rounded-2xl border-l-4 border-l-blue-400">
+                        <p>• Rango permitido: <strong>20°C a 28°C</strong> (Sugerido: 22°C).</p>
+                        <p>• El sistema inteligente <strong>se apaga solo</strong> si baja de los rangos de confort configurados o a las 7:00 AM.</p>
+                    </div>
+                    <p class="font-bold italic">Apagar siempre al salir del departamento.</p>
+                    <p class="text-red-500 text-[10px] font-bold">Prohibida intervención técnica, digital o física del equipo.</p>
+                </div>
+            </div>
+
+            <!-- TV / Streaming -->
+            <div class="card-premium overflow-hidden">
+                <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleAcc('uso-tv')">
+                    <span class="font-bold text-xs uppercase tracking-widest"><i class="fas fa-tv mr-3 text-indigo-500"></i> TV / Streaming</span>
+                    <i class="fas fa-chevron-down text-slate-300" id="icon-uso-tv"></i>
+                </button>
+                <div id="uso-tv" class="hidden p-6 bg-slate-50 border-t text-xs text-slate-600 space-y-2">
+                    <p>Smart TV disponible, puedes usar tus aplicaciones favoritas.</p>
+                </div>
+            </div>
+
+            <!-- Agua Caliente -->
+            <div class="card-premium overflow-hidden">
+                <button class="w-full text-left p-6 flex justify-between items-center" onclick="toggleAcc('uso-water')">
+                    <span class="font-bold text-xs uppercase tracking-widest"><i class="fas fa-tint mr-3 text-blue-300"></i> Agua Caliente</span>
+                    <i class="fas fa-chevron-down text-slate-300" id="icon-uso-water"></i>
+                </button>
+                <div id="uso-water" class="hidden p-6 bg-slate-50 border-t text-xs text-slate-600 leading-relaxed">
+                    Sistema de caldera central automática. Deje correr el agua unos instantes; baja desde la central del edificio (último piso).
+                </div>
+            </div>
+        </section>
+
+        <!-- 3) REGLAS DE LA CASA (RESTAURADO COMPLETO) -->
+        <section id="reglas" class="tab-content space-y-4">
+            <h2 class="serif text-2xl mb-6">Reglas de la Casa</h2>
+            <div class="card-premium p-6 space-y-1">
+                <div class="bg-slate-50 p-4 rounded-2xl text-[11px] text-slate-600 italic mb-4">
+                    "El edificio es una comunidad tranquila, por lo que no se permiten fiestas ni reuniones ruidosas."
+                </div>
+                
+                <div class="rule-item">
+                    <i class="fas fa-user-check text-brand-accent w-8 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold">Uso Exclusivo</p>
+                        <p class="text-[10px] text-slate-500">Para uso exclusivo de los huéspedes registrados en la reserva.</p>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <i class="fas fa-users text-brand-accent w-8 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold">Visitas Excepcionales</p>
+                        <p class="text-[10px] text-slate-500">De forma excepcional se permiten visitas solo de día, con aviso previo y registro en conserjería. No está permitido que pernocten.</p>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <i class="fas fa-volume-mute text-brand-accent w-8 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold">Horas de Silencio</p>
+                        <p class="text-[10px] text-slate-500">Respetar descanso entre 23:00 y 08:00 hrs.</p>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <i class="fas fa-smoking-ban text-red-500 w-8 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold text-red-600">Prohibido Fumar</p>
+                        <p class="text-[10px] text-slate-500">Por respeto a futuros huéspedes, no está permitido dentro del depto.</p>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <i class="fas fa-swimmer text-brand-accent w-8 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold">Áreas Comunes</p>
+                        <p class="text-[10px] text-slate-500">Piscina y Lavandería con previa coordinación y registro en conserjería.</p>
+                    </div>
+                </div>
+
+                <div class="rule-item border-none">
+                    <i class="fas fa-trash-alt text-brand-accent w-8 mt-1"></i>
+                    <div>
+                        <p class="text-xs font-bold">Gestión de Basura</p>
+                        <p class="text-[10px] text-slate-500">Ductos en cada piso. Residuos grandes a zona de reciclaje del piso 7.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4) ENTORNO (RESTAURADO COMPLETO) -->
+        <section id="barrio" class="tab-content space-y-3">
+            <h2 class="serif text-2xl mb-4">Guía del Barrio</h2>
+            <div class="space-y-2">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Abastecimiento</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=R+%26+V+Market+Vicuña+Mackenna" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">🛒</span> R & V Market <span class="ml-auto text-[9px] font-normal italic">A pasos (V. Mackenna)</span>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Nuestro+Supermercado+Santa+Elena+Santiago" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">🥖</span> Nuestro Supermercado <span class="ml-auto text-[9px] font-normal italic">Hasta 21h (Santa Elena)</span>
+                </a>
+                
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1 mt-3">Salud</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=Farmacia+Tu+FarmaciaOnline+San+Eugenio" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">💊</span> Tu FarmaciaOnline <span class="ml-auto text-[9px] font-normal italic">8 min</span>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Farmacias+Farmaline+San+Eugenio" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">➕</span> Farmacias Farmaline <span class="ml-auto text-[9px] font-normal italic">10 min</span>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Farmacia+Vecinal+Local+2+Santiago" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">🧴</span> Farmacia Vecinal L2 <span class="ml-auto text-[9px] font-normal italic">6 min</span>
+                </a>
+
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1 mt-3">Otros</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=Metro+Ñuble+Santiago" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">🚇</span> Metro Ñuble <span class="ml-auto text-[9px] font-normal italic">L5 / L6</span>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Parque+San+Eugenio+Santiago" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">🌳</span> Parque San Eugenio <span class="ml-auto text-[9px] font-normal italic">10 min</span>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Jumbo+Mall+Florida+Center" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">🍖</span> Jumbo Florida Center <span class="ml-auto text-[9px] font-normal italic">20 min</span>
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Supermercado+Lider+Carlos+Valdovinos" target="_blank" class="card-premium p-4 flex items-center text-[11px] font-bold">
+                    <span class="mr-3">🥫</span> Lider Carlos Valdovinos <span class="ml-auto text-[9px] font-normal italic">10 min</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 5) TURISMO -->
+        <section id="turismo" class="tab-content space-y-6">
+            <h2 class="serif text-2xl mb-4 text-center">Panoramas</h2>
+            <a href="https://es-l.airbnb.com/s/guidebooks?refinement_paths%5B%5D=%2Fguidebooks%2F6830917" target="_blank" class="block relative rounded-[2.5rem] overflow-hidden h-48 shadow-xl group">
+                <div class="absolute inset-0 bg-black/40 z-10"></div>
+                <img src="https://images.unsplash.com/photo-1571210862729-78a52d3779a2?auto=format&fit=crop&q=80&w=600" class="absolute inset-0 w-full h-full object-cover" alt="Santiago">
+                <div class="relative z-20 h-full p-8 flex flex-col justify-end">
+                    <p class="text-[9px] font-bold text-yellow-500 uppercase tracking-widest mb-1">Airbnb Guide</p>
+                    <h3 class="serif text-xl text-white">Guía Turística Digital</h3>
+                </div>
+            </a>
+            <div class="grid grid-cols-1 gap-2 text-xs font-bold text-slate-700">
+                <div class="card-premium p-4">1. Barrio Lastarria</div>
+                <div class="card-premium p-4">2. Barrio Italia</div>
+                <div class="card-premium p-4">3. Parque Deportivo Estadio Nacional</div>
+                <div class="card-premium p-4">4. Persa Biobío <span class="font-normal italic">(Solo fds o festivos)</span></div>
+                <div class="card-premium p-4">5. Factoría Franklin</div>
+                <div class="card-premium p-4">6. Mercado Urbano Tobalaba (MUT)</div>
+                <div class="card-premium p-4">7. Parque Metropolitano (Cerro San Cristóbal)</div>
+            </div>
+        </section>
+
+        <!-- 6) SALIDA (MODIFICADO CON EXCEPCIÓN Y NUEVO ORDEN) -->
+        <section id="checkout" class="tab-content space-y-6">
+            <div class="text-center pt-8">
+                <div class="w-20 h-20 bg-slate-900 text-brand-accent rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
+                    <i class="fas fa-door-closed text-3xl"></i>
+                </div>
+                <h2 class="serif text-3xl mb-2">Check-out</h2>
+                <p class="text-xs uppercase tracking-widest font-bold text-slate-400">Límite: 12:00 PM</p>
+            </div>
+
+            <div class="card-premium overflow-hidden">
+                <div class="bg-slate-50 p-4 border-b text-[10px] font-bold uppercase tracking-widest text-center text-slate-400">Lista de Verificación</div>
+                <div class="p-6 space-y-5">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs shrink-0">1</div>
+                        <p class="text-xs font-semibold text-slate-600">Asegúrese de que el aire acondicionado y luces estén apagados.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs shrink-0">2</div>
+                        <p class="text-xs font-semibold text-slate-600">Retire residuos grandes a la zona de reciclaje del Piso 7.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs shrink-0">3</div>
+                        <p class="text-xs font-semibold text-slate-600">Verifique que la puerta quede bien cerrada al salir.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs shrink-0">4</div>
+                        <p class="text-xs font-semibold text-slate-600">Por favor, da aviso al anfitrión cuando te vayas.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs shrink-0">5</div>
+                        <p class="text-xs font-semibold text-slate-600 text-brand-accent">Deje llaves y control remoto sobre la mesa del comedor (solo si reservaste estacionamiento).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 text-center bg-brand-accent/10 rounded-[2.5rem] border border-brand-accent/20">
+                <p class="serif italic text-brand-accent text-lg mb-2">¡Muchas gracias!</p>
+                <p class="text-xs text-slate-600 leading-relaxed">Ha sido un placer recibirte. Esperamos que tu estadía haya sido maravillosa y que tengas un excelente viaje de regreso. ¡Vuelve pronto!</p>
+            </div>
+        </section>
+
+        <!-- 7) SOPORTE (RESTAURADO CON PROTOCOLO PREVIO) -->
+        <section id="soporte" class="tab-content space-y-6">
+            <h2 class="serif text-2xl mb-6 text-center">Soporte y Emergencias</h2>
+            <div class="space-y-4">
+                
+                <!-- Botón Desplegable para Especificaciones de Ayuda -->
+                <div class="card-premium overflow-hidden border border-red-100">
+                    <button onclick="toggleAcc('soporte-tabla')" class="w-full p-6 flex items-center bg-red-50 hover:bg-red-100/50 transition-all text-left">
+                        <div class="w-12 h-12 bg-red-500 text-white rounded-2xl flex items-center justify-center mr-5 text-xl">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-bold text-slate-800">Ayuda Anfitrión</p>
+                            <p class="text-[10px] text-red-600 font-bold uppercase tracking-widest">Solo emergencias (Ver protocolo)</p>
+                        </div>
+                        <i class="fas fa-chevron-down text-red-400 transition-transform" id="icon-soporte-tabla"></i>
+                    </button>
+                    
+                    <!-- Tabla de Especificación Desplegable -->
+                    <div id="soporte-tabla" class="hidden p-4 bg-white border-t space-y-4 text-[10px] leading-relaxed">
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Columna 1: Contactar al anfitrión -->
+                            <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100 space-y-2">
+                                <p class="font-bold text-emerald-800 flex items-center">
+                                    <i class="fas fa-check-circle mr-1"></i> Contactar al anfitrión (WhatsApp)
+                                </p>
+                                <ul class="list-disc pl-3 space-y-1 text-slate-600 font-semibold">
+                                    <li>Fuga de agua / filtraciones dentro del depto.</li>
+                                    <li>Corte de luz solo en el depto o prolongado (&gt;2 hrs).</li>
+                                    <li>Problemas con WiFi prolongados (&gt;1 hora).</li>
+                                    <li>Cerradura rota / no puedes entrar o salir.</li>
+                                    <li>Aire acondicionado o calefacción no funciona (en la noche).</li>
+                                    <li>Problemas con agua caliente.</li>
+                                    <li>Ruido reiterado en días o no resuelto por conserjería.</li>
+                                    <li>Mascota atrapada dentro del depto o balcón.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Columna 2: Emergencias - LLAMAR DIRECTO -->
+                            <div class="bg-red-50 p-3 rounded-2xl border border-red-100 space-y-2">
+                                <p class="font-bold text-red-800 flex items-center">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i> Emergencias – NO contactar, llamar directo
+                                </p>
+                                <ul class="list-disc pl-3 space-y-1 text-slate-600 font-semibold">
+                                    <li>Incendio <span class="text-red-600">→ Bomberos (132)</span></li>
+                                    <li>Emergencia médica grave <span class="text-red-600">→ SAMU (131)</span></li>
+                                    <li>Robo o situación sospechosa <span class="text-red-600">→ Carabineros (133)</span></li>
+                                    <li>Fuga de gas <span class="text-red-600">→ Bomberos (132)</span></li>
+                                    <li>Accidente grave <span class="text-red-600">→ Carabineros (133)</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Botón de Contacto Idéntico dentro de la especificación -->
+                        <div class="pt-2">
+                            <a href="https://wa.me/56989418093" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-2xl flex items-center justify-center font-bold text-xs uppercase tracking-wider shadow-md shadow-emerald-100 transition-all active:scale-95">
+                                <i class="fab fa-whatsapp mr-2 text-lg"></i> Contactar WhatsApp (+569 8941 8093)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-premium p-6 flex items-center">
+                    <div class="w-12 h-12 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center mr-5 text-xl"><i class="fas fa-user-shield"></i></div>
+                    <div class="flex-1">
+                        <p class="text-sm font-bold text-slate-800">Conserjería 24/7</p>
+                        <p class="text-[10px] text-slate-500 italic leading-relaxed">Citófono o presencialmente en recepción.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Números Críticos</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="bg-white p-3 rounded-2xl text-center border font-bold text-red-600">131 <p class="text-[8px] text-slate-400 uppercase">Salud</p></div>
+                        <div class="bg-white p-3 rounded-2xl text-center border font-bold text-blue-600">133 <p class="text-[8px] text-slate-400 uppercase">Policía</p></div>
+                        <div class="bg-white p-3 rounded-2xl text-center border font-bold text-orange-600">132 <p class="text-[8px] text-slate-400 uppercase">Bomberos</p></div>
+                    </div>
+                </div>
+                
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 pt-4">Centros Asistenciales</p>
+                <div class="card-premium p-2 divide-y">
+                    <a href="https://maps.google.com/?q=Curicó+345+Santiago" target="_blank" class="flex justify-between items-center p-4">
+                        <div class="flex items-center"><i class="fas fa-hospital-symbol text-red-500 mr-3"></i> <div><p class="text-[11px] font-bold">Ex Posta Central</p><p class="text-[9px] text-slate-400">Público • 11 min</p></div></div>
+                        <i class="fas fa-external-link-alt text-slate-200 text-xs"></i>
+                    </a>
+                    <a href="https://maps.google.com/?q=Ramón+Carnicer+185+Providencia" target="_blank" class="flex justify-between items-center p-4">
+                        <div class="flex items-center"><i class="fas fa-hospital-symbol text-blue-500 mr-3"></i> <div><p class="text-[11px] font-bold">H. Trabajador ACHS</p><p class="text-[9px] text-slate-400">Privado • 11 min</p></div></div>
+                        <i class="fas fa-external-link-alt text-slate-200 text-xs"></i>
+                    </a>
+                    <a href="https://maps.google.com/?q=Marcoleta+367+Santiago" target="_blank" class="flex justify-between items-center p-4">
+                        <div class="flex items-center"><i class="fas fa-hospital-symbol text-brand-accent mr-3"></i> <div><p class="text-[11px] font-bold">UC CHRISTUS</p><p class="text-[9px] text-slate-400">Privado • 12 min</p></div></div>
+                        <i class="fas fa-external-link-alt text-slate-200 text-xs"></i>
+                    </a>
+                    <a href="https://maps.google.com/?q=Vicuña+Mackenna+4686+Macul" target="_blank" class="flex justify-between items-center p-4">
+                        <div class="flex items-center"><i class="fas fa-hospital-symbol text-brand-accent mr-3"></i> <div><p class="text-[11px] font-bold">C.M. San Joaquín UC</p><p class="text-[9px] text-slate-400">Privado • 14 min</p></div></div>
+                        <i class="fas fa-external-link-alt text-slate-200 text-xs"></i>
+                    </a>
+                    <a href="https://maps.google.com/?q=Gran+Avenida+3204+San+Miguel" target="_blank" class="flex justify-between items-center p-4">
+                        <div class="flex items-center"><i class="fas fa-hospital-symbol text-red-500 mr-3"></i> <div><p class="text-[11px] font-bold">H. Barros Luco</p><p class="text-[9px] text-slate-400">Público • 16 min</p></div></div>
+                        <i class="fas fa-external-link-alt text-slate-200 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast" class="copy-toast font-bold">¡Copiado con éxito! ✨</div>
+
+    <script>
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('btn-' + id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleAcc(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            el.classList.toggle('hidden');
+            if(icon) icon.style.transform = el.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        function copyToClipboard(id) {
+            const text = document.getElementById(id).innerText;
+            const input = document.createElement('textarea');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            const toast = document.getElementById("toast");
+            toast.className = "copy-toast show";
+            setTimeout(() => { toast.className = "copy-toast"; }, 2500);
+        }
+    </script>
+</body>
+</html>
